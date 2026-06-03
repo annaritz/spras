@@ -1,13 +1,10 @@
-import warnings
 from pathlib import Path
 
 from spras.config.container_schema import ProcessedContainerSettings
 from spras.config.util import Empty
 from spras.containers import prepare_volume, run_container_and_log
-from spras.dataset import Dataset
+from spras.dataset import MissingDataError
 from spras.interactome import (
-    convert_undirected_to_directed,
-    has_direction,
     reinsert_direction_col_undirected,
 )
 from spras.prm import PRM
@@ -34,7 +31,7 @@ class LocalNeighborhood(PRM[Empty]):
         """
         LocalNeighborhood.validate_required_inputs(filename_map)
 
-        # Get all nodes with any prize, whether it's active, whether it's a source. 
+        # Get all nodes with any prize, whether it's active, whether it's a source.
         # NODEID is always included in the node table
         if data.contains_node_columns(['prize','active','sources', 'targets']):
             node_df = data.get_node_columns(['prize','active','sources', 'targets'])
@@ -47,7 +44,7 @@ class LocalNeighborhood(PRM[Empty]):
         # Get network file
         edges_df = data.get_interactome()
 
-        # genereate pipe-delimited network file with no header.
+        # generate pipe-delimited network file with no header.
         edges_df.to_csv(filename_map['network'],sep='|',index=False,columns=['Interactor1','Interactor2'],header=False)
 
     @staticmethod
@@ -95,7 +92,7 @@ class LocalNeighborhood(PRM[Empty]):
     def parse_output(raw_pathway_file, standardized_pathway_file, params):
         """
         Convert a predicted pathway into the universal format
-        @param raw_pathway_file: pathway file produced by an algorithm's run function (pipe-delimited output) 
+        @param raw_pathway_file: pathway file produced by an algorithm's run function (pipe-delimited output)
         @param standardized_pathway_file: the same pathway written in the universal format
         """
         df = raw_pathway_df(raw_pathway_file, sep='|', header=None)

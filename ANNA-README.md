@@ -2,13 +2,13 @@
 
 # Step 0
 
-- "An alternative way to set up SPRAS..." a little clunky for new folks. 
-- I think the end of this step needs to have a summary about the structure of the code repository, or walks contributors through it. 
+- "An alternative way to set up SPRAS..." a little clunky for new folks.
+- I think the end of this step needs to have a summary about the structure of the code repository, or walks contributors through it.
 
 # Step 1
 
 - Typo in the pre-formatted text.
-- Explain why you need to copy the inputs to this directory. It's to run the docker image locally. 
+- Explain why you need to copy the inputs to this directory. It's to run the docker image locally.
 - To run `local_neighborhood_alg.py` on the inputs:
 ```
 cp ../../test/LocalNeighborhood/input/ln-network.txt .
@@ -17,8 +17,8 @@ python local_neighborhood_alg.py --network ln-network.txt --nodes ln-nodes.txt -
 ```
 - To compare the output with the existing output:
 ```
-cat ln-out.txt 
-cat ../../test/LocalNeighborhood/expected_output/ln-output.txt 
+cat ln-out.txt
+cat ../../test/LocalNeighborhood/expected_output/ln-output.txt
 diff ln-out.txt ../../test/LocalNeighborhood/expected_output/ln-output.txt
 ```
 
@@ -38,7 +38,7 @@ diff ln-out.txt ../../test/LocalNeighborhood/expected_output/ln-output.txt
 ```
 docker run -w /data --mount type=bind,source=/Users/aritz/Documents/github/projects/annaritz-spras/docker-wrappers/LocalNeighborhood,target=/data annaritz/local-neighborhood python local_neighborhood_alg.py --network /data/ln-network.txt --nodes /data/ln-nodes.txt --output /data/ln-output.txt
 ```
-- Alternative: 
+- Alternative:
 ```
 docker run -v /Users/aritz/Documents/github/projects/annaritz-spras/test/LocalNeighborhood/input:/input -v /Users/aritz/Documents/github/projects/annaritz-spras/docker-wrappers/LocalNeighborhood:/output annaritz/local-neighborhood python local_neighborhood_alg.py --network /input/ln-network.txt --nodes /input/ln-nodes.txt --output /output/ln-out.txt
 ```
@@ -57,7 +57,7 @@ docker push annaritz/local-neighborhood
 
 - What are the possible required inputs? `nodetypes` vs. `nodes`?
 - How do you test `local_neighborhood.py` while you work through Step 3?
-- " In an interactive Python session, run the following commands to load the data0 dataset and explore the nodes and interactome." - this has to happen at the top level of the repo. 
+- " In an interactive Python session, run the following commands to load the data0 dataset and explore the nodes and interactome." - this has to happen at the top level of the repo.
 
 ```
 >>> from spras.config.dataset import DatasetSchema
@@ -75,15 +75,15 @@ label='data0' node_files=['node-prizes.txt', 'sources.txt', 'targets.txt'] edge_
 0           A           B    0.98         U
 1           B           C    0.77         U
 ```
-- need to specify that LocalNeighborhood requires an **undirected** interactome. 
+- need to specify that LocalNeighborhood requires an **undirected** interactome.
 
 # Step 4
 
-- Make a new config with just LocalNeighborhood. 
+- Make a new config with just LocalNeighborhood.
 ```
 cp config/config.yaml config/contrib.yaml
 # make the suggested changes
-snakemake --cores 1 --configfile config/contrib.yaml 
+snakemake --cores 1 --configfile config/contrib.yaml
 ```
 
 - YAML name: underscores/spaces ok?

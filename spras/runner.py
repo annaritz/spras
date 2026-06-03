@@ -6,6 +6,7 @@ from spras.btb import BowTieBuilder
 from spras.dataset import Dataset, DatasetSchema
 from spras.diamond import DIAMOnD
 from spras.domino import DOMINO
+from spras.local_neighborhood import LocalNeighborhood
 from spras.meo import MEO
 from spras.mincostflow import MinCostFlow
 from spras.omicsintegrator1 import OmicsIntegrator1
@@ -15,7 +16,6 @@ from spras.prm import PRM
 from spras.responsenet import ResponseNet
 from spras.rwr import RWR
 from spras.strwr import ST_RWR
-from spras.local_neighborhood import LocalNeighborhood
 from spras.util import LoosePathLike
 
 algorithms: dict[str, type[PRM]] = {
