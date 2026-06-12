@@ -131,7 +131,7 @@ To just test the new tests:
 pytest test/LocalNeighborhood test/generate-inputs test/parse-outputs test/test_config.py
 ```
 
-Before committing run 
+Before committing run
 
 ```
 pre-commit run --all-files
