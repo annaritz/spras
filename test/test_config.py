@@ -28,7 +28,7 @@ def get_test_config():
             "framework": "singularity",
             "registry": {
                 "base_url": "docker.io",
-                "owner": "annaritz",
+                "owner": "reedcompbio",
             },
         },
         "hash_length": 7,
@@ -64,7 +64,7 @@ def get_test_config():
             # but it would be nice to have once we introduce an algorithm that takes more than 1 string parameter.
             {
                 "name": "omicsintegrator2",
-                "include": False,
+                "include": True,
                 "runs": {
                     "strings": {"dummy_mode": ["terminals", "others"], "b": 3},
                     # spacing in np.linspace is on purpose
@@ -74,7 +74,7 @@ def get_test_config():
             },
             {
                 "name": "meo",
-                "include": False,
+                "include": True,
                 "runs": {
                     "numbersAndBoolsDuplicate": {"max_path_length": 1, "rand_restarts": [float(2.0), 3], "local_search": [True, False]},
                     "numbersAndBool": {"max_path_length": 2, "rand_restarts": [float(2.0), 3], "local_search": [True]},
@@ -84,7 +84,7 @@ def get_test_config():
             },
             {
                 "name": "mincostflow",
-                "include": False,
+                "include": True,
                 "runs": {
                     "int64artifact": {"flow": "np.arange(5, 7)", "capacity": [2, 3]}
                 }
