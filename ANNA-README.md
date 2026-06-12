@@ -94,7 +94,14 @@ snakemake --cores 1 --configfile config/contrib.yaml
 
 - some tests fail before completing step 5. Will wait until the tutorial is done to see if this is an issue.
 
-- `test/test_ln.py` --> `test/LocalNeighborhood/test_ln.py`. 
+- `test/test_ln.py` --> `test/LocalNeighborhood/test_ln.py`.
+
+Needed to pass in the config object (defined from config.yml at the top of the file) directly to the `LocalNeighborhood.run()` calls. An example is
+
+```
+LocalNeighborhood.run({"network":TEST_DIR / 'input' / 'ln-network.txt',"nodes": TEST_DIR/ 'input'/ 'ln-nodes.txt'}, output_file=OUT_FILE,container_settings = config.config.container_settings)
+```
+
 - `test_ap.py` --> example from the AllPairs directory.
 
 -"First pull the image <username>/local-neighborhood from Docker Hub. Then build the Docker image using the Dockerfile that was completed in Step 2." Unclear whether this is what is happening when you extend `build-containers.yml`.
@@ -109,9 +116,12 @@ cp  output/prepared/data0_34bbfe3a-local_neighborhood_34bbfe3a-inputs/network.tx
 
 ```
 cp output/data0_34bbfe3a-local_neighborhood_34bbfe3a-params-XIU6LOZ/raw-pathway.txt test/parse-outputs/input/local_neighborhood-raw-pathway.txt
-cp output/data0_34bbfe3a-local_neighborhood_34bbfe3a-params-XIU6LOZ/pathway.txt test/parse-outputs/expected/local_neighborhood-pathway-expected.txt 
+cp output/data0_34bbfe3a-local_neighborhood_34bbfe3a-params-XIU6LOZ/pathway.txt test/parse-outputs/expected/local_neighborhood-pathway-expected.txt
 # make empty raw pathway
-touch test/parse-outputs/input/empty/local_neighborhood-empty-raw-pathway.txt 
+touch test/parse-outputs/input/empty/local_neighborhood-empty-raw-pathway.txt
+# add duplicate edges to copy of raw pathway file
+cp test/parse-outputs/input/local_neighborhood-raw-pathway.txt test/parse-outputs/input/duplicate-edges/local_neighborhood-raw-pathway.txt
+# duplicate some edges in the new file.
 ```
 - in `test_config.py` --> set everything to false except ln and add username.
 
@@ -120,3 +130,11 @@ To just test the new tests:
 ```
 pytest test/LocalNeighborhood test/generate-inputs test/parse-outputs test/test_config.py
 ```
+
+Before committing run 
+
+```
+pre-commit run --all-files
+```
+
+# Step 6

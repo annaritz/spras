@@ -71,7 +71,7 @@ containers:
 algorithms:
   - name: "local_neighborhood"
     include: true
-    
+
   - name: "pathlinker"
     include: false
     runs:

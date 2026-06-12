@@ -1,15 +1,15 @@
+import shutil
 import sys
 from filecmp import cmp
 from pathlib import Path
-import shutil
 
 import pytest
 
 import spras.config.config as config
+from spras.config.container_schema import ContainerFramework
 from spras.local_neighborhood import LocalNeighborhood
-from spras.config.container_schema import ContainerFramework, ProcessedContainerSettings
 
-config.init_from_file("config/contrib.yaml")
+config.init_from_file("config/config.yaml")
 
 # TODO consider refactoring to simplify the import
 # Modify the path because of the - in the directory
@@ -60,25 +60,26 @@ class TestLocalNeighborhood:
         # Test the expected error is raised when required arguments are missing
         with pytest.raises(ValueError):
             # No nodetypes
-            LocalNeighborhood.run({"network": TEST_DIR / 'input' / 'ln-network.txt'},output_file=OUT_FILE)
+            LocalNeighborhood.run({"network": TEST_DIR / 'input' / 'ln-network.txt'},output_file=OUT_FILE,container_settings = config.config.container_settings)
             # no network
-            LocalNeighborhood.run({"nodes": TEST_DIR / 'input' / 'ln-nodes.txt'},output_file=OUT_FILE)
+            LocalNeighborhood.run({"nodes": TEST_DIR / 'input' / 'ln-nodes.txt'},output_file=OUT_FILE,container_settings = config.config.container_settings)
 
     # Only run Singularity test if the binary is available on the system
     # spython is only available on Unix, but do not explicitly skip non-Unix platforms
     @pytest.mark.skipif(not shutil.which('singularity'), reason='Singularity not found on system')
     def test_ln_singularity(self):
+        config.config.container_settings.framework=ContainerFramework.singularity # replace docker with singularity in container settings.
         OUT_FILE.unlink(missing_ok=True)
         # Only include required arguments and run with Singularity
         LocalNeighborhood.run({"network": TEST_DIR / 'input' / 'ln-network.txt',"nodes": TEST_DIR / 'input' / 'ln-nodes.txt'},
                      output_file=OUT_FILE,
-                     container_settings=ProcessedContainerSettings(framework=ContainerFramework.singularity))
+                     container_settings = config.config.container_settings)
         assert OUT_FILE.exists()
 
     # test local neighborhood's docker container
     def test_ln_container(self):
         OUT_FILE.unlink(missing_ok=True)
-        LocalNeighborhood.run({"network":TEST_DIR / 'input' / 'ln-network.txt',"nodes": TEST_DIR/ 'input'/ 'ln-nodes.txt'}, output_file=OUT_FILE)
+        LocalNeighborhood.run({"network":TEST_DIR / 'input' / 'ln-network.txt',"nodes": TEST_DIR/ 'input'/ 'ln-nodes.txt'}, output_file=OUT_FILE,container_settings = config.config.container_settings)
         assert OUT_FILE.exists(), 'Output file was not written'
         expected_file = Path(TEST_DIR, 'expected_output', 'ln-output.txt')
         assert cmp(OUT_FILE, expected_file, shallow=False), 'Output file does not match expected output file'
