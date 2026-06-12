@@ -73,3 +73,8 @@ jobs:
       # of detected changes.
       always_build: true
       context: ./
+  build-and-remove-ln:
+    uses: "./.github/workflows/build-and-remove-template.yml"
+    with:
+      path: docker-wrappers/LocalNeighborhood
+      container: annaritz/local_neighborhood

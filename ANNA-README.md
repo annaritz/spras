@@ -1,5 +1,7 @@
 ## Contributing Guide Notes
 
+Going through this tutorial: [Contributing a new pathway reconstruction algorithm](https://spras.readthedocs.io/en/latest/contributing/index.html)
+
 # Step 0
 
 - "An alternative way to set up SPRAS..." a little clunky for new folks.
@@ -87,3 +89,34 @@ snakemake --cores 1 --configfile config/contrib.yaml
 ```
 
 - YAML name: underscores/spaces ok?
+
+# Step 5
+
+- some tests fail before completing step 5. Will wait until the tutorial is done to see if this is an issue.
+
+- `test/test_ln.py` --> `test/LocalNeighborhood/test_ln.py`. 
+- `test_ap.py` --> example from the AllPairs directory.
+
+-"First pull the image <username>/local-neighborhood from Docker Hub. Then build the Docker image using the Dockerfile that was completed in Step 2." Unclear whether this is what is happening when you extend `build-containers.yml`.
+
+- "Modify generate inputs:" --> Modify `generate-inputs/test_generate_inputs.py`.
+
+```
+cp  output/prepared/data0_34bbfe3a-local_neighborhood_34bbfe3a-inputs/network.txt  test/generate-inputs/expected/local_neighborhood-network-expected.txt
+```
+
+- "Modify parse outputs:" --> Modify `parse-outputs/test_parse_outputs.py`.
+
+```
+cp output/data0_34bbfe3a-local_neighborhood_34bbfe3a-params-XIU6LOZ/raw-pathway.txt test/parse-outputs/input/local_neighborhood-raw-pathway.txt
+cp output/data0_34bbfe3a-local_neighborhood_34bbfe3a-params-XIU6LOZ/pathway.txt test/parse-outputs/expected/local_neighborhood-pathway-expected.txt 
+# make empty raw pathway
+touch test/parse-outputs/input/empty/local_neighborhood-empty-raw-pathway.txt 
+```
+- in `test_config.py` --> set everything to false except ln and add username.
+
+To just test the new tests:
+
+```
+pytest test/LocalNeighborhood test/generate-inputs test/parse-outputs test/test_config.py
+```

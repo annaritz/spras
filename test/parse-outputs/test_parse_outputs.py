@@ -53,7 +53,8 @@ algorithms = {
             other_files=[],
             data_dir=INDIR / 'dataset' / 'diamond'
         ))
-    }
+    },
+    'local_neighborhood': {}
 }
 
 class TestParseOutputs:
